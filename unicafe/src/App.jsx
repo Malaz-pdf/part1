@@ -1,4 +1,39 @@
 import { useState } from 'react'
+const Button = (props) => {
+  return(
+   <button onClick={props.onClick}>
+      {props.children}
+    </button>  
+  )
+}
+const StatisticLine =(props) => {
+  return(
+      <tr>
+        <td> {props.text} </td>
+        <td> {props.value} </td>
+      </tr>
+    
+  )
+}
+
+const Statistics = ({good,neutral,bad,total,average,positivePercent}) => {
+  // ...
+  return (
+    <div>
+      <h2>statistics</h2>
+      <table>
+      <tbody>
+      <StatisticLine text="good" value={good} />
+      <StatisticLine text="neutral" value={neutral} />
+      <StatisticLine text="bad" value={bad} />
+      <StatisticLine text="total" value={total} />
+      <StatisticLine text="average" value={average} />
+      <StatisticLine text="positive" value={positivePercent + "%"}/>
+      </tbody>
+      </table>
+    </div>
+  )
+}
 
 const App = () => {
   // save clicks of each button to its own state
@@ -33,21 +68,31 @@ const App = () => {
     setAverage((good * 1 + neutral * 0 + updatedbad * -1) / updatedTotal)
     setPositivePercent((good / updatedTotal ) * 100)
   }
+
+  let statistics
+  if(total > 0){
+   statistics= (
+    <Statistics 
+      good={good}
+      neutral={neutral}
+      bad={bad}
+      total={total}
+      average={average}
+      positivePercent={positivePercent}
+    />
+  )}
+  else {
+    statistics = <p> No feedback given </p>
+
+  }
   
   return (
     <div>
       <h1>give feedback</h1> 
-      <button onClick = {handelGoodClick}>good</button>
-      <button onClick = {handelNeutralClick}>neutral</button>
-      <button onClick = {handelBadClick}>bad</button>
-      <h2>statistics</h2>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <p>total {total}</p>
-      <p>average {average}</p>
-      <p>positive {positivePercent} % </p>
-
+      <Button onClick = {handelGoodClick}> good </Button>
+      <Button onClick = {handelNeutralClick}> neutral </Button>
+      <Button onClick = {handelBadClick}> bad </Button>
+      {statistics}
     </div>
   )
 }
